@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  nominatim:
+    build: .
+    container_name: nominatim_container
+    tty: true
