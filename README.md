@@ -1,60 +1,47 @@
 # Nominatim Containerization using Docker
-Overview
-This project demonstrates the containerization of Nominatim, an open‑source geocoding and reverse‑geocoding engine based on OpenStreetMap (OSM). Docker is used to simplify deployment, dependency management, and scalability.
 
-# Objectives
-Simplify Nominatim deployment
+This repository shows a lightweight way to containerize **Nominatim**, the OpenStreetMap geocoder. It focuses on keeping setup simple while leaving room to add data import and production hardening.
 
-Improve portability and consistency
+## Prerequisites
+- Docker (v24+) and Docker Compose
+- Git
+- ~8 GB RAM recommended for real-world OSM imports
 
-Reduce installation complexity
+## Quickstart
+```bash
+git clone https://github.com/Satwikvarma/nominatim-containerization.git
+cd nominatim-containerization
 
-Enable scalable container‑based execution
+# Build the base image and start an interactive container
+docker compose build
+docker compose up -d
+docker compose exec nominatim bash
+```
 
-# Technologies
-Docker
+> Tip: You can also use the helper scripts in `scripts/`:
+> - `./scripts/build.sh` to build the image
+> - `./scripts/run.sh` to start the container
 
-Docker Compose
+## Project Structure
+- `Dockerfile` – builds a minimal Ubuntu 22.04 image with PostGIS and Nominatim sources
+- `docker-compose.yml` – brings up the Nominatim container
+- `scripts/` – helper scripts for build/run
+- `docs/` – installation guide, architecture notes, and results
+- `screenshots/` – reference images
 
-Nominatim
+## Results
+- Successful container build with Nominatim source available inside the container
+- Faster repeatable setup compared to manual installation
+- Portable, reproducible environment
 
-PostgreSQL + PostGIS
+## Use Cases
+- Geospatial applications
+- Location‑based services
+- Urban planning
 
-OpenStreetMap (OSM)
+## Next steps / How to improve this
+See [`docs/improvement-guide.md`](docs/improvement-guide.md) for concrete follow-up steps such as adding data import automation, persistent Postgres volumes, non-root execution, and production-ready runtime settings.
 
-# Project Structure
-Dockerfile
-docker-compose.yml
-scripts/
-docs/
-screenshots/
-README.md
-Installation & Run
-docker build -t nominatim .
-docker-compose up -d
-Results
-Successful containerized deployment
-
-Faster setup compared to traditional installation
-
-Portable and reproducible environment
-
-# Use Cases
-Geospatial applications
-
-Location‑based services
-
-Urban planning
-
-# Author
-Satwik Varma
-GitHub: Satwikvarma
-
-#Contributor
-Sai SHaran Mankala
-GitHub- SharanMankala
-# Final command:
-git add README.md
-git commit -m "Add README"
-git push
-
+## Authors
+- Satwik Varma ([GitHub: Satwikvarma](https://github.com/Satwikvarma))
+- Sai Sharan Mankala ([GitHub: SharanMankala](https://github.com/SharanMankala))
