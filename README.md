@@ -39,6 +39,47 @@ docker compose exec nominatim bash
 - Location‑based services
 - Urban planning
 
+## Architecture Overview
+
+This project containerizes **OpenStreetMap Nominatim** for reliable local/production geocoding deployments, including database persistence, import/update workflows, and optional caching/observability.
+
+```mermaid
+flowchart LR
+    C[Client] --> A[API Gateway / Nominatim API]
+    A --> D[(PostgreSQL + PostGIS)]
+    U[OSM Import & Diff Updates] --> D
+    A <--> R[(Redis Cache - optional)]
+```
+
+For full diagrams and detailed flow, see [`docs/architecture.md`](docs/architecture.md).
+
+---
+
+## Geocoding Request Flow (Summary)
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API as Nominatim API
+    participant Cache as Redis (optional)
+    participant DB as PostgreSQL + PostGIS
+
+    Client->>API: /search?q=...
+    API->>Cache: lookup(query)
+    alt cache hit
+        Cache-->>API: result
+    else cache miss
+        API->>DB: geocoding query
+        DB-->>API: candidates
+        API->>Cache: store(TTL)
+    end
+    API-->>Client: JSON response
+```
+
+For the full sequence (including metrics/error paths), see [`docs/architecture.md`](docs/architecture.md).
+
+---
+
 ## Next steps / How to improve this
 See [`docs/improvement-guide.md`](docs/improvement-guide.md) for concrete follow-up steps such as adding data import automation, persistent Postgres volumes, non-root execution, and production-ready runtime settings.
 
